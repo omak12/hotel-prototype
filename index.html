@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blue Sky Hotel</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0B2A4A;--sky:#2F8FDB;--mist:#EAF3FA;--bg:#F5F9FC;--card:#fff;--ink:#14243A;--mute:#5F7287;--line:#D8E4EE;--gold:#B8892E;--ok:#1E9E6A;--warn:#D98A12;--bad:#C94141;--r:14px}
+*{box-sizing:border-box;margin:0}
+body{font-family:Manrope,system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;line-height:1.5}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;color:var(--navy);line-height:1.15}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.btn{background:var(--navy);color:#fff;border:0;border-radius:10px;padding:.7rem 1.1rem;font-weight:700}
+.btn:hover{background:#133e6b}.btn.sky{background:var(--sky)}.btn.ghost{background:transparent;color:var(--navy);border:1.5px solid var(--line)}
+.btn.sm{padding:.4rem .75rem;font-size:.85rem}.btn.block{width:100%}
+label{display:block;font-size:.85rem;font-weight:700;margin:.9rem 0 .3rem;color:var(--navy)}
+input,select,textarea{width:100%;padding:.7rem .85rem;border:1.5px solid var(--line);border-radius:10px;background:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1rem}
+.chip{display:inline-block;background:var(--mist);color:var(--navy);border-radius:99px;padding:.2rem .65rem;font-size:.8rem;margin:.15rem .25rem .15rem 0}
+.badge{display:inline-block;border-radius:99px;padding:.2rem .7rem;font-size:.8rem;font-weight:700}
+.s-Pending{background:#FFF1D6;color:#8A5A00}.s-Terkonfirmasi{background:#D9F2E7;color:#0F6B47}.s-Checked-In{background:#DCEBFA;color:#175A9E}.s-Checked-Out{background:#E7EAEE;color:#4A5663}
+.s-Aktif{background:#D9F2E7;color:#0F6B47}.s-Maintenance{background:#FFF1D6;color:#8A5A00}.s-Nonaktif{background:#F6DADA;color:#8E2A2A}
+.mute{color:var(--mute)}.row{display:flex;gap:.75rem;flex-wrap:wrap}.row>*{flex:1;min-width:140px}
+.hidden{display:none!important}
+/* login */
+.login{min-height:100vh;display:grid;place-items:center;padding:1.2rem;background:linear-gradient(180deg,#0B2A4A 0%,#1C5C98 55%,#9CCBEF 100%)}
+.login .card{width:min(420px,100%);padding:1.6rem}
+.brand{font-family:"Cormorant Garamond",serif;font-size:2rem;font-weight:700;color:var(--navy)}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--mist);border-radius:12px;padding:4px;margin:1rem 0 .2rem}
+.seg button{border:0;background:transparent;padding:.6rem;border-radius:9px;font-weight:700;color:var(--mute)}
+.seg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 4px #0b2a4a22}
+.err{color:var(--bad);font-size:.85rem;margin-top:.6rem}
+/* guest */
+.top{background:var(--navy);color:#fff;padding:1rem 1.2rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;position:sticky;top:0;z-index:5}
+.top h2{color:#fff;font-size:1.35rem}.top small{opacity:.75}
+.wrap{max-width:900px;margin:0 auto;padding:1.2rem 1.2rem 6rem}
+.bnav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:6}
+.bnav button{flex:1;border:0;background:none;padding:.8rem .3rem;font-weight:700;color:var(--mute);font-size:.9rem}
+.bnav button.on{color:var(--sky);box-shadow:inset 0 3px var(--sky)}
+.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.room .pic{height:170px;border-radius:10px;margin-bottom:.8rem;display:flex;align-items:flex-end;padding:.6rem;color:#fff;font-weight:700}
+.pic.std{background:linear-gradient(135deg,#6FB4E8,#2F6FA8)}.pic.vip{background:linear-gradient(135deg,#0B2A4A,#2B7BBF 60%,#C9A24B)}
+.price{font-family:"Cormorant Garamond",serif;font-size:1.5rem;font-weight:700;color:var(--navy)}
+table.t{width:100%;border-collapse:collapse;font-size:.92rem}
+.t th,.t td{padding:.65rem .6rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.t th{color:var(--mute);font-weight:700;font-size:.8rem}
+.scroll{overflow-x:auto}
+.qr{display:grid;place-items:center;padding:1rem;background:#fff;border:1px dashed var(--sky);border-radius:var(--r);margin:1rem 0}
+.code{font-family:"Cormorant Garamond",serif;font-size:2.2rem;font-weight:700;color:var(--navy)}
+.live{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--ok);margin-right:.4rem;animation:p 1.6s infinite}
+@keyframes p{50%{opacity:.3}}
+@media(prefers-reduced-motion:reduce){.live{animation:none}}
+/* admin */
+.adm{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+.side{background:var(--navy);color:#fff;padding:1.2rem;display:flex;flex-direction:column;gap:.3rem}
+.side .brand{color:#fff;margin-bottom:1rem;font-size:1.5rem}
+.side button{text-align:left;background:none;border:0;color:#C9DDF0;padding:.7rem .8rem;border-radius:10px;font-weight:700}
+.side button.on{background:#ffffff1f;color:#fff}
+.main{padding:1.5rem;max-width:1100px;width:100%}
+.stats{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:1rem 0 1.5rem}
+.stat b{display:block;font-family:"Cormorant Garamond",serif;font-size:2rem;color:var(--navy)}
+.bar{height:8px;background:var(--mist);border-radius:9px;overflow:hidden;margin-top:.5rem}.bar i{display:block;height:100%;background:var(--sky)}
+.filters{display:flex;gap:.4rem;flex-wrap:wrap;margin:1rem 0}
+.filters button{border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:.35rem .9rem;font-weight:700;font-size:.85rem}
+.filters button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.toast{position:fixed;left:50%;bottom:5rem;transform:translateX(-50%);background:var(--navy);color:#fff;padding:.7rem 1.1rem;border-radius:10px;z-index:20}
+dialog{border:0;border-radius:var(--r);padding:1.3rem;width:min(440px,92vw)}dialog::backdrop{background:#0b2a4a88}
+@media(max-width:760px){.adm{grid-template-columns:1fr}.side{flex-direction:row;overflow-x:auto;align-items:center}.side .brand{margin:0 1rem 0 0;white-space:nowrap}.side button{white-space:nowrap}}
+@media print{.top,.bnav,.noprint{display:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast" class="toast hidden" role="status"></div>
+<dialog id="dlg"></dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* ===== Data & penyimpanan (localStorage) ===== */
+const KEY='bsh_v1';
+const seed={
+ rooms:[
+  {id:'std',name:'Standard Modern Room',tag:'STANDARD',price:450000,rating:4.5,units:10,status:'Aktif',desc:'Kamar nyaman serba praktis dengan fasilitas lengkap modern.',feat:['Free Wi-Fi','Smart TV 40"','Breakfast'],bed:'Queen Bed',size:'28 m²',view:'Kota',breakfast:true,jacuzzi:false,shuttle:false},
+  {id:'vip',name:'VIP Executive Ocean Suite',tag:'VIP SUITE',price:1250000,rating:4.9,units:4,status:'Aktif',desc:'Pemandangan laut memukau, ruang luas, layanan VIP istimewa.',feat:['Private Jacuzzi','Airport Shuttle','VIP Lounge'],bed:'King Bed',size:'65 m²',view:'Laut',breakfast:true,jacuzzi:true,shuttle:true}
+ ],
+ res:[
+  {code:'BSH-8790',name:'Rina Kartika',wa:'081300001111',email:'rina@mail.com',roomId:'std',in:'2026-10-21',out:'2026-10-23',guests:2,pay:'Transfer Bank (VA)',note:'',total:900000,status:'Checked-In'},
+  {code:'BSH-8805',name:'Budi Santoso',wa:'081200002222',email:'budi@mail.com',roomId:'vip',in:'2026-10-25',out:'2026-10-27',guests:2,pay:'Kartu Kredit',note:'Dekorasi ulang tahun',total:2500000,status:'Pending'}
+ ]
+};
+const load=()=>{try{return JSON.parse(localStorage.getItem(KEY))||structuredClone(seed)}catch(e){return structuredClone(seed)}};
+let DB=load();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}};
+window.addEventListener('storage',e=>{if(e.key===KEY){DB=load();render()}}); // sinkron antar tab (live)
+
+const S={role:null,email:'',page:'katalog',loginRole:'Tamu',err:'',
+ cin:'2026-10-24',cout:'2026-10-26',q:'',pick:null,filter:'Semua',lastCode:null};
+const rp=n=>'Rp '+Number(n).toLocaleString('id-ID');
+const nights=(a,b)=>Math.max(1,Math.round((new Date(b)-new Date(a))/864e5));
+const room=id=>DB.rooms.find(r=>r.id===id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fdate=d=>new Date(d).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(toast.x);toast.x=setTimeout(()=>t.classList.add('hidden'),2600)}
+
+/* ===== Tampilan ===== */
+function render(){
+ const a=document.getElementById('app');
+ if(!S.role)a.innerHTML=vLogin();
+ else if(S.role==='Admin')a.innerHTML=vAdmin();
+ else a.innerHTML=vGuest();
+ if(S.role==='Tamu'&&S.page==='pesanan')drawQR();
+}
+function vLogin(){const g=S.loginRole==='Tamu';return `
+<div class="login"><div class="card">
+ <div class="brand">Blue Sky Hotel</div><p class="mute">Luxury Stay Above The Clouds</p>
+ <h1 style="font-size:1.6rem;margin-top:1.2rem">Masuk</h1>
+ <p class="mute" style="font-size:.9rem">Pilih hak akses lalu isi akun untuk melanjutkan.</p>
+ <div class="seg"><button data-a="role" data-v="Tamu" class="${g?'on':''}">Tamu</button><button data-a="role" data-v="Admin" class="${g?'':'on'}">Admin</button></div>
+ <label for="em">Email / ID Pengguna</label><input id="em" type="email" value="${g?'tamu@bluesky.com':'admin@bluesky.com'}">
+ <label for="pw">Kata Sandi</label><input id="pw" type="password" value="${g?'tamu1234':'admin123'}">
+ ${S.err?`<div class="err">${S.err}</div>`:''}
+ <button class="btn sky block" style="margin-top:1.2rem" data-a="login">Masuk Aplikasi</button>
+ <p class="mute" style="font-size:.85rem;margin-top:1rem;text-align:center">Butuh bantuan? Hubungi Resepsionis</p>
+</div></div>`}
+
+function vGuest(){
+ const titles={katalog:['Cari & Pesan Kamar','Selamat datang, Tamu Hotel'],komparasi:['Komparasi Kamar','Bandingkan fasilitas Standard & VIP Suite'],form:['Formulir Reservasi','Lengkapi data pemesanan kamar'],pesanan:['Status & E-Voucher','Pantau pemesananmu secara langsung']};
+ const t=titles[S.page];
+ let body='';
+ if(S.page==='katalog')body=vCatalog();
+ if(S.page==='komparasi')body=vCompare();
+ if(S.page==='form')body=vForm();
+ if(S.page==='pesanan')body=vOrders();
+ const nav=[['katalog','Katalog'],['komparasi','Komparasi'],['pesanan','Pesanan Saya']];
+ return `<header class="top"><div><h2>Blue Sky Hotel</h2><small>${t[0]}</small></div><button class="btn ghost sm" style="color:#fff;border-color:#ffffff55" data-a="logout">Keluar</button></header>
+ <main class="wrap"><p class="mute" style="margin-bottom:1rem">${t[1]}</p>${body}</main>
+ <nav class="bnav" aria-label="Navigasi tamu">${nav.map(([k,l])=>`<button data-a="nav" data-v="${k}" class="${S.page===k||(k==='katalog'&&S.page==='form')?'on':''}">${l}</button>`).join('')}</nav>`}
+
+function vCatalog(){
+ const q=S.q.toLowerCase();
+ const list=DB.rooms.filter(r=>r.status==='Aktif'&&(r.name+r.desc+r.feat.join(' ')).toLowerCase().includes(q));
+ return `<div class="card row" style="margin-bottom:1rem">
+  <div><label for="cin" style="margin-top:0">Check-in</label><input id="cin" type="date" value="${S.cin}" data-a="date"></div>
+  <div><label for="cout" style="margin-top:0">Check-out</label><input id="cout" type="date" value="${S.cout}" data-a="date"></div>
+  <div style="flex:2"><label for="q" style="margin-top:0">Cari tipe atau fasilitas</label><input id="q" type="search" placeholder="Contoh: jacuzzi, wifi" value="${esc(S.q)}" data-a="search"></div></div>
+ <h3 style="margin:1.2rem 0 .6rem">Pilihan tipe kamar <span class="mute" style="font-size:1rem">· ${list.length} tipe tersedia</span></h3>
+ ${list.length?`<div class="grid">${list.map(r=>`<article class="card room">
+  <div class="pic ${r.id==='vip'?'vip':'std'}">${esc(r.tag)}</div>
+  <div class="row" style="justify-content:space-between;align-items:baseline"><h3>${esc(r.name)}</h3><b>★ ${r.rating}</b></div>
+  <p class="mute" style="font-size:.9rem;margin:.3rem 0">${esc(r.desc)}</p>
+  <div>${r.feat.map(f=>`<span class="chip">${esc(f)}</span>`).join('')}</div>
+  <p style="margin:.8rem 0"><span class="price">${rp(r.price)}</span> <span class="mute">/malam</span></p>
+  <button class="btn block ${r.id==='vip'?'sky':''}" data-a="pick" data-v="${r.id}">Pesan Kamar</button></article>`).join('')}</div>`
+ :`<div class="card mute">Tidak ada kamar yang cocok. Hapus kata kunci pencarian untuk melihat semua tipe.</div>`}`}
+
+function vCompare(){
+ const act=DB.rooms.filter(r=>r.status==='Aktif');
+ const yn=v=>v?'Ya':'Tidak';
+ const rows=[['Harga per malam',r=>rp(r.price)],['Jenis tempat tidur',r=>r.bed],['Luas kamar',r=>r.size],['Pemandangan',r=>r.view],['Sarapan',r=>yn(r.breakfast)],['Jacuzzi',r=>yn(r.jacuzzi)],['Antar-jemput bandara',r=>yn(r.shuttle)]];
+ return `<div class="card scroll"><table class="t"><thead><tr><th>Fitur</th>${act.map(r=>`<th>${esc(r.name)}</th>`).join('')}</tr></thead>
+ <tbody>${rows.map(([l,f])=>`<tr><th>${l}</th>${act.map(r=>`<td>${esc(f(r))}</td>`).join('')}</tr>`).join('')}
+ <tr><td></td>${act.map(r=>`<td><button class="btn sm" data-a="pick" data-v="${r.id}">Pilih ${r.id==='vip'?'VIP Suite':'Standard'}</button></td>`).join('')}</tr></tbody></table></div>`}
+
+function vForm(){
+ const r=room(S.pick);if(!r)return `<div class="card">Pilih kamar terlebih dahulu di Katalog.</div>`;
+ const n=nights(S.cin,S.cout);
+ return `<form id="rf" class="card"><div class="card" style="background:var(--mist);border:0"><span class="mute" style="font-size:.85rem">Tipe dipilih</span><h3>${esc(r.name)}</h3><span class="mute">${rp(r.price)} / malam</span></div>
+ <label for="f-nama">Nama lengkap tamu</label><input id="f-nama" required placeholder="Sesuai identitas">
+ <label for="f-wa">Nomor WhatsApp / HP</label><input id="f-wa" required inputmode="tel" pattern="[0-9+\\- ]{8,16}" placeholder="081234567890">
+ <div class="row"><div><label for="f-in">Check-in</label><input id="f-in" type="date" required value="${S.cin}"></div><div><label for="f-out">Check-out</label><input id="f-out" type="date" required value="${S.cout}"></div></div>
+ <div class="row"><div><label for="f-g">Jumlah tamu</label><select id="f-g">${[1,2,3,4].map(i=>`<option ${i===2?'selected':''}>${i}</option>`).join('')}</select></div>
+ <div><label for="f-pay">Metode pembayaran</label><select id="f-pay"><option>Transfer Bank (VA)</option><option>Kartu Kredit</option><option>Bayar di Hotel</option></select></div></div>
+ <label for="f-note">Permintaan khusus (opsional)</label><textarea id="f-note" rows="3" placeholder="Contoh: bebas asap rokok, check-in awal, dekorasi ulang tahun"></textarea>
+ <div class="card" style="margin-top:1rem;display:flex;justify-content:space-between;align-items:center"><div><span class="mute">Total pembayaran (<span id="f-n">${n}</span> malam)</span><br><span class="mute" style="font-size:.8rem">Pajak sudah termasuk</span></div><span class="price" id="f-tot">${rp(n*r.price)}</span></div>
+ <button class="btn sky block" style="margin-top:1rem" type="submit">Konfirmasi &amp; Buat Pemesanan</button></form>`}
+
+function myRes(){return DB.res.filter(x=>x.email===S.email).sort((a,b)=>b.code.localeCompare(a.code))}
+function vOrders(){
+ const l=myRes();
+ if(!l.length)return `<div class="card">Belum ada pesanan. <button class="btn sm" data-a="nav" data-v="katalog">Cari kamar</button></div>`;
+ return l.map(x=>{const r=room(x.roomId)||{name:x.roomId};return `<article class="card" style="margin-bottom:1rem">
+ <p><span class="live"></span><span class="badge s-${x.status}">${x.status==='Pending'?'Menunggu Konfirmasi Admin':x.status}</span></p>
+ <p class="mute" style="margin-top:.8rem;font-size:.85rem">Kode booking resmi</p><div class="code">${x.code}</div>
+ <table class="t"><tbody>
+ <tr><th>Nama pemesan</th><td>${esc(x.name)}</td></tr><tr><th>Tipe kamar</th><td>${esc(r.name)}</td></tr>
+ <tr><th>Tanggal menginap</th><td>${x.in} s/d ${x.out}</td></tr><tr><th>Total pembayaran</th><td><b>${rp(x.total)}</b></td></tr></tbody></table>
+ <div class="qr"><div class="qrbox" data-code="${x.code}"></div><p class="mute" style="font-size:.85rem;margin-top:.6rem;text-align:center">Tunjukkan QR Code ini saat check-in di resepsionis</p></div>
+ <button class="btn ghost sm noprint" data-a="print">Simpan / Cetak E-Voucher</button></article>`}).join('')}
+function drawQR(){document.querySelectorAll('.qrbox').forEach(el=>{el.innerHTML='';if(window.QRCode)new QRCode(el,{text:el.dataset.code,width:150,height:150});else el.textContent=el.dataset.code})}
+
+function vAdmin(){
+ const nav=[['dash','Dashboard'],['res','Reservasi'],['rooms','Kamar']];
+ const body=S.page==='res'?aRes():S.page==='rooms'?aRooms():aDash();
+ return `<div class="adm"><aside class="side"><div class="brand">Blue Sky</div>${nav.map(([k,l])=>`<button data-a="nav" data-v="${k}" class="${S.page===k?'on':''}">${l}</button>`).join('')}<button data-a="logout" style="margin-top:auto">Keluar</button></aside><main class="main">${body}</main></div>`}
+function aDash(){
+ const active=DB.res.filter(x=>x.status==='Terkonfirmasi'||x.status==='Checked-In');
+ const total=DB.rooms.filter(r=>r.status==='Aktif').reduce((s,r)=>s+r.units,0)||1;
+ const occ=Math.min(100,Math.round(DB.res.filter(x=>x.status==='Checked-In').length/total*100));
+ const rev=active.reduce((s,x)=>s+x.total,0);
+ const pend=DB.res.filter(x=>x.status==='Pending').length;
+ return `<h1>Dashboard</h1><p class="mute">Ringkasan operasional hotel</p><div class="stats">
+ <div class="card stat"><span class="mute">Okupansi kamar</span><b>${occ}%</b><div class="bar"><i style="width:${occ}%"></i></div></div>
+ <div class="card stat"><span class="mute">Estimasi pendapatan aktif</span><b>${rp(rev)}</b></div>
+ <div class="card stat"><span class="mute">Perlu konfirmasi</span><b>${pend}</b></div>
+ <div class="card stat"><span class="mute">Total reservasi</span><b>${DB.res.length}</b></div></div>
+ ${pend?`<button class="btn" data-a="nav" data-v="res">Tinjau ${pend} pemesanan baru</button>`:''}`}
+function aRes(){
+ const f=['Semua','Pending','Terkonfirmasi','Checked-In','Checked-Out'];
+ const l=DB.res.filter(x=>S.filter==='Semua'||x.status===S.filter);
+ const next={Pending:['Terkonfirmasi','Setujui'],Terkonfirmasi:['Checked-In','Check-In'],'Checked-In':['Checked-Out','Check-Out']};
+ return `<h1>Reservasi</h1><div class="filters">${f.map(x=>`<button data-a="filter" data-v="${x}" class="${S.filter===x?'on':''}">${x}</button>`).join('')}</div>
+ <div class="card scroll">${l.length?`<table class="t"><thead><tr><th>Kode</th><th>Tamu</th><th>Kamar</th><th>Menginap</th><th>Total</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${l.map(x=>{const n=next[x.status];return `<tr><td><b>${x.code}</b></td><td>${esc(x.name)}<br><span class="mute">${esc(x.wa)}</span></td><td>${esc((room(x.roomId)||{}).name)}</td><td>${x.in} s/d ${x.out}</td><td>${rp(x.total)}</td><td><span class="badge s-${x.status}">${x.status}</span></td>
+ <td>${n?`<button class="btn sm" data-a="status" data-v="${x.code}|${n[0]}">${n[1]}</button>`:'<span class="mute">Selesai</span>'}</td></tr>`}).join('')}</tbody></table>`:'<p class="mute">Tidak ada reservasi dengan status ini.</p>'}</div>`}
+function aRooms(){return `<div class="row" style="justify-content:space-between;align-items:center"><h1 style="flex:none">Kamar</h1><button class="btn" data-a="addroom" style="flex:none">Tambah kamar</button></div>
+ <div class="card scroll" style="margin-top:1rem"><table class="t"><thead><tr><th>Tipe</th><th>Harga / malam</th><th>Unit</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${DB.rooms.map(r=>`<tr><td><b>${esc(r.name)}</b></td><td>${rp(r.price)}</td><td>${r.units}</td><td><span class="badge s-${r.status}">${r.status}</span></td>
+ <td><button class="btn ghost sm" data-a="price" data-v="${r.id}">Ubah harga</button> <button class="btn ghost sm" data-a="rs" data-v="${r.id}|${r.status==='Maintenance'?'Aktif':'Maintenance'}">${r.status==='Maintenance'?'Selesai maintenance':'Maintenance'}</button> <button class="btn ghost sm" data-a="rs" data-v="${r.id}|${r.status==='Nonaktif'?'Aktif':'Nonaktif'}">${r.status==='Nonaktif'?'Aktifkan':'Nonaktifkan'}</button></td></tr>`).join('')}</tbody></table></div>`}
+
+/* ===== Aksi ===== */
+const dlg=document.getElementById('dlg');
+function ask(title,fields,ok){dlg.innerHTML=`<form method="dialog"><h3>${title}</h3>${fields.map(f=>`<label for="d-${f.k}">${f.l}</label><input id="d-${f.k}" type="${f.t||'text'}" value="${f.v??''}" required>`).join('')}<div class="row" style="margin-top:1.2rem"><button class="btn ghost" value="x" formnovalidate>Batal</button><button class="btn" value="ok">Simpan</button></div></form>`;
+ dlg.onclose=()=>{if(dlg.returnValue==='ok'){const o={};fields.forEach(f=>o[f.k]=document.getElementById('d-'+f.k).value);ok(o)}dlg.returnValue=''};dlg.showModal()}
+
+document.addEventListener('click',e=>{
+ const b=e.target.closest('[data-a]');if(!b||b.tagName==='INPUT')return;
+ const a=b.dataset.a,v=b.dataset.v;
+ if(a==='role'){S.loginRole=v;S.err='';render()}
+ else if(a==='login'){
+  const em=document.getElementById('em').value.trim(),pw=document.getElementById('pw').value;
+  if(!em||pw.length<4){S.err='Isi email dan kata sandi (minimal 4 karakter).';return render()}
+  if(S.loginRole==='Admin'&&!(em==='admin@bluesky.com'&&pw==='admin123')){S.err='Akun admin tidak dikenali. Gunakan akun demo di README.';return render()}
+  S.role=S.loginRole;S.email=em;S.err='';S.page=S.role==='Admin'?'dash':'katalog';render()}
+ else if(a==='logout'){S.role=null;S.pick=null;render()}
+ else if(a==='nav'){S.page=v;render();scrollTo(0,0)}
+ else if(a==='pick'){S.pick=v;S.page='form';render();scrollTo(0,0)}
+ else if(a==='print')print();
+ else if(a==='filter'){S.filter=v;render()}
+ else if(a==='status'){const[c,s]=v.split('|');const x=DB.res.find(r=>r.code===c);x.status=s;save();render();toast(`${c} → ${s}`)}
+ else if(a==='rs'){const[id,s]=v.split('|');room(id).status=s;save();render();toast('Status kamar diperbarui')}
+ else if(a==='price'){const r=room(v);ask('Ubah harga per malam',[{k:'p',l:'Harga (Rp)',t:'number',v:r.price}],o=>{r.price=Math.max(0,+o.p);save();render();toast('Harga diperbarui')})}
+ else if(a==='addroom'){ask('Tambah kamar baru',[{k:'n',l:'Nama tipe kamar'},{k:'p',l:'Harga per malam (Rp)',t:'number'},{k:'u',l:'Jumlah unit',t:'number',v:1}],o=>{DB.rooms.push({id:'r'+Date.now(),name:o.n,tag:'BARU',price:+o.p,rating:4.5,units:+o.u,status:'Aktif',desc:'Kamar baru Blue Sky Hotel.',feat:['Free Wi-Fi'],bed:'-',size:'-',view:'-',breakfast:false,jacuzzi:false,shuttle:false});save();render();toast('Kamar ditambahkan')})}
+});
+document.addEventListener('input',e=>{
+ const t=e.target;
+ if(t.dataset.a==='search'){S.q=t.value;const p=t.selectionStart;render();const n=document.getElementById('q');n.focus();n.setSelectionRange(p,p)}
+ if(t.id==='f-in'||t.id==='f-out'){const r=room(S.pick),n=nights(f('f-in'),f('f-out'));document.getElementById('f-n').textContent=n;document.getElementById('f-tot').textContent=rp(n*r.price)}
+});
+document.addEventListener('change',e=>{if(e.target.dataset.a==='date'){S.cin=document.getElementById('cin').value;S.cout=document.getElementById('cout').value;if(S.cout<=S.cin){const d=new Date(S.cin);d.setDate(d.getDate()+1);S.cout=d.toISOString().slice(0,10)}render()}});
+const f=id=>document.getElementById(id).value;
+document.addEventListener('submit',e=>{
+ if(e.target.id!=='rf')return;e.preventDefault();
+ if(f('f-out')<=f('f-in'))return toast('Tanggal check-out harus setelah check-in');
+ const r=room(S.pick),n=nights(f('f-in'),f('f-out'));
+ const code='BSH-'+(8800+DB.res.length+Math.floor(Math.random()*90));
+ DB.res.push({code,name:f('f-nama').trim(),wa:f('f-wa').trim(),email:S.email,roomId:r.id,in:f('f-in'),out:f('f-out'),guests:+f('f-g'),pay:f('f-pay'),note:f('f-note').trim(),total:n*r.price,status:'Pending'});
+ save();S.page='pesanan';render();toast('Pemesanan dibuat: '+code);scrollTo(0,0)});
+render();
+</script>
+</body>
+</html>
